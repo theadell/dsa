@@ -4,6 +4,9 @@
 #include <sys/types.h>
 #include <assert.h>
 
+
+#define ARRAY_LEN(xs) (sizeof(xs) / sizeof((xs)[0])) 
+
 typedef struct Node Node;
 
 struct Node{
@@ -33,8 +36,26 @@ void insert_text(Node* root, const char* text) {
   insert_text(root->children[idx], text +1);
 }
 
+// DOT is a graph description language. Tools like Graphviz can read DOT 
+// anguage files and generate visualizations of graphs. 
+void dump_dot(Node *root) {
+  size_t index = root - node_pool;
+  printf("  Node_%zu\n", index);
+  for (size_t i = 0; i < ARRAY_LEN(root->children); ++i) {
+    if (root->children[i] != NULL) {
+      size_t child_index = root->children[i] - node_pool;
+      printf("   Node_%zu -> Node_%zu\n [label=%c]",index,child_index,(char) i);
+      dump_dot(root->children[i]);
+    }
+  }
+}
+
 int main() {
   Node* root = alloc_node();
   insert_text(root, "Hello");
+  insert_text(root, "Helium");
+  printf("digraph Trie {\n");
+  dump_dot(root);
+  printf("}\n");
   return 0;
 }

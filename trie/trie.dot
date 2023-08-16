@@ -1,0 +1,19 @@
+digraph Trie {
+  Node_0
+   Node_0 -> Node_1
+ [label=H]  Node_1
+   Node_1 -> Node_2
+ [label=e]  Node_2
+   Node_2 -> Node_3
+ [label=l]  Node_3
+   Node_3 -> Node_6
+ [label=i]  Node_6
+   Node_6 -> Node_7
+ [label=u]  Node_7
+   Node_7 -> Node_8
+ [label=m]  Node_8
+   Node_3 -> Node_4
+ [label=l]  Node_4
+   Node_4 -> Node_5
+ [label=o]  Node_5
+}
