@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <assert.h>
-
+#include <string.h>
 #include "fruits.h"
 #define ARRAY_LEN(xs) (sizeof(xs) / sizeof((xs)[0])) 
 
@@ -50,7 +50,25 @@ void dump_dot(Node *root) {
   }
 }
 
-int main() {
+void usage(FILE *sink) {
+  fprintf(sink, "Usage: ./trie <SUBCOMMAND>\n");
+  fprintf(sink, "SUBCOMMANDS:\n");
+  fprintf(sink, "   dot                     Dump the Trie into a Graphviz dot file\n");
+  fprintf(sink, "   complete <prefix>       Suggest perfix autocompletion based on Trie.\n");
+}
+int main(int argc, char **argv) {
+
+  if (argc <2 ) {
+    usage(stderr);
+    fprintf(stderr, "ERROR: no subcommand is provided\n");
+    exit(1);
+  }
+
+  const char *subcommand = argv[1];
+
+  if (strcmp(subcommand, "dot") == 0) {
+   
+  
   Node* root = alloc_node();
   for (size_t i = 0; i < fruits_count; ++i) {
     insert_text(root, fruits[i]);
@@ -59,5 +77,11 @@ int main() {
   printf("   Node_%zu [label=root]\n",root -node_pool);
   dump_dot(root);
   printf("}\n");
-  return 0;
+  } else if (strcmp(subcommand, "complete") == 0 ) {
+    assert(0 && "TODO: complete subcommand is not yet implemented\n");
+  } else {
+    usage(stderr);
+    fprintf(stderr, "ERROR: unknown command `%s`\n",subcommand);
+    exit(1);
+  }
 }
