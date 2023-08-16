@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <assert.h>
 
-
+#include "fruits.h"
 #define ARRAY_LEN(xs) (sizeof(xs) / sizeof((xs)[0])) 
 
 typedef struct Node Node;
@@ -40,11 +40,11 @@ void insert_text(Node* root, const char* text) {
 // anguage files and generate visualizations of graphs. 
 void dump_dot(Node *root) {
   size_t index = root - node_pool;
-  printf("  Node_%zu\n", index);
   for (size_t i = 0; i < ARRAY_LEN(root->children); ++i) {
     if (root->children[i] != NULL) {
       size_t child_index = root->children[i] - node_pool;
-      printf("   Node_%zu -> Node_%zu\n [label=%c]",index,child_index,(char) i);
+      printf("  Node_%zu [label=\"%c\"]\n", child_index, (char) i);
+      printf("   Node_%zu -> Node_%zu\n [label=\"%c\"]",index,child_index,(char) i);
       dump_dot(root->children[i]);
     }
   }
@@ -52,9 +52,11 @@ void dump_dot(Node *root) {
 
 int main() {
   Node* root = alloc_node();
-  insert_text(root, "Hello");
-  insert_text(root, "Helium");
+  for (size_t i = 0; i < fruits_count; ++i) {
+    insert_text(root, fruits[i]);
+  }
   printf("digraph Trie {\n");
+  printf("   Node_%zu [label=root]\n",root -node_pool);
   dump_dot(root);
   printf("}\n");
   return 0;
